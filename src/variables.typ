@@ -1,86 +1,99 @@
 // Document metadata
 #let doc = (
-  author: "John Doe",
-  title: "Jarmos's Resume",
-  description: "Jarmos's Software Development Engineering (SDE) resume written and built using Typst.",
+  author: "Sukesh Seth",
+  title: "Sukesh's Resume",
+  description: "Sukesh's Software Development Engineering (SDE) resume written and built using Typst.",
   keywords: ("resume", "engineering", "typst"),
 )
 
 // College related information
 #let college = (
-  name: "University of Georgia",
-  degree: "MSc",
-  subject: "Computer Science and Information Technology",
-  start: 2013,
-  end: 2015,
+  name: "SRM Institute of Science and Technology",
+  degree: "B. Tech.",
+  subject: "Electronics and Communications Engineering",
+  start: 2018,
+  end: 2022,
 )
 
 // Skills
 #let skills = (
-  "Software Development": "Python, Golang, Lua, TypeScript (and JavaScript)",
-  "Frameworks & Libraries": "FastAPI, Nuxt.js, Chi, SQLAlchemy",
-  "Miscellaneous": "Terraform, Ansible, Git, Packer, PostgreSQL",
+  "Languages": "Java, Golang, SQL",
+  "Frameworks": "Spring Boot, Spring Security, Hibernate, Node.js, Gin, GORM",
+  "APIs & Messaging": "REST APIs, gRPC, Kafka",
+  "Databases & Caching": "PostgreSQL, Oracle, Redis, Elasticsearch",
+  "DevOps & Cloud": "Docker, Kubernetes, AWS, CI/CD",
+  "Testing": "JUnit, Mockito, Jest, Testify/gomock",
+  "Version Control": "Git",
+  "Problem Solving": "Data Structures & Algorithms, System Design",
 )
 
 // Header related information
 #let details = (
-  name: "John Doe",
+  name: "Sukesh Seth",
+  tagline: "Software Engineer  |  Java · Golang · Spring Boot · Gin · Microservices",
+  summary: [Software engineer with 4+ years at ThoughtWorks, owning distributed systems and microservices end-to-end for BFSI and enterprise platforms, from architecture through production reliability. Works primarily in Java, Golang and Node.js, with depth in Kafka-driven event systems, Redis caching, Kubernetes/Helm deployments and cloud-native observability. Comfortable working across the full backend lifecycle -- from development and testing to debugging and monitoring.],
   links: (
-    (type: "email", url: "contact@jarmos.dev", display: "contact@jarmos.dev"),
-    (url: "https://jarmos.dev", display: "jarmos.dev"),
-    (url: "https://github.com/Jarmos-San", display: "github.com/Jarmos-san"),
+    (url: "tel:+918939352970", display: "+918939352970"),
+    (type: "email", url: "contact.sukesh20@gmail.com", display: "contact.sukesh20@gmail.com"),
+    (type: "location", display: "Bangalore, India"),
+    (url: "https://www.linkedin.com/in/sukeshseth", display: "LinkedIn"),
+    (url: "https://sukeshseth.medium.com/", display: "Medium"),
+    (url: "https://github.com/sukesh2000", display: "GitHub"),
+    (url: "https://leetcode.com/u/sukesh1312/", display: "Leetcode")
   ),
 )
 
 // Past work experience and achievements
 #let experiences = (
   (
-    designation: "Chief Technology Officer (CTO)",
-    company: "Confidential Company",
-    location: "Remote",
-    start: "2022",
-    end: datetime.today().year(),
+    designation: "Software Engineer",
+    company: "ThoughtWorks Technologies - Bangalore",
+    location: "Bangalore",
+    start: "July 2022",
+    end: "Present",
     achievements: (
-      [*Co-founded* a company specializing in *custom web-based software solutions*, empowering *online businesses and digital content creators* with tailored tools to streamline operations and enhance their digital presence.],
-      [*Established and led the engineering team*, overseeing Software Development, Cybersecurity, and DevOps, and *implemented best practices* to ensure scalability, security, and operational efficiency.],
-      [*Designed and led* the development of flagship products (including open-source initiatives), built for e-commerce and content workflows, increasing user adoption and contributing to revenue growth.],
-      [*Spearheaded* the company's *open-source initiative*, establishing contribution guidelines, promoting adoption, and engaging with the developer community to strengthen the ecosystem.],
+      (
+        project: "IDFC Bank",
+        points: (
+          [Config and deployment platform: manual, fragmented config changes across 98 microservices were slowing releases and risking avoidable outages.],
+          [As a founding senior contributor on a 5-engineer team, helped design and deliver a centralized deployment-variable and configuration-management platform (Golang, Oracle) to fix this.],
+          [Personally drove implementation of Redis-backed caching for authorization lookups, versioned config records with full change history, Kafka-driven automated rollout of config-change events and an automated release pipeline (conftest, Pact, Helm) governed by a ServiceNow approval workflow.],
+          [Designed and built a Golang auth middleware for an MCP server, exposing the config platform to AI-assisted tools.],
+          [Delivered 60% less manual config time, 85% fewer DB permission-check queries on systems processing 10M+ daily transactions and 65% platform adoption growth within one quarter.],
+          [Observability and release safety: fragmented tracing and slow policy validation were increasing production risk across a polyglot microservices stack.],
+          [Owned the modernization of observability and release-safety practices for the platform.],
+          [Migrated tracing and metrics from OpenCensus to OpenTelemetry across Go, Java and Node.js, introduced a region-aware Kafka client mode for the Kafka-less DR region, left-shifted conftest validation to per-service checks across 98 services biweekly and hardened secrets handling with audit logging.],
+          [Automated disaster-recovery failover by integrating an existing runbook into our Helm tooling with a CI/CD pipeline, provisioning Kafka in parallel (bridged by no-op stubs until ready) alongside Redis, Prometheus and networking, then switching services active with controlled scale-down/up of deployments and StatefulSets in 12 minutes.],
+          [Cut policy-validation runtime from 40 minutes to 3 minutes, reduced MTTD by 70% and MTTR by 45%, with zero severity-1 outages since rollout.],
+        ),
+      ),
+      (
+        project: "IDeaS",
+        points: (
+          [Transformed forecasting feature from month-wise to day-wise forecasts (30x finer granularity) using Spring Boot and MS SQL, adding new calculation dimensions and Kafka-driven adjustments for incoming booking data.],
+          [Introduced real-time data analysis capabilities using Kafka, reducing price analysis time between two cycles by 24 hours.],
+          [Played a key role in monolith-to-microservices migration using Spring MVC, enabling parallel cross-service processing and easing DB lock contention observed under peak load.],
+        ),
+      ),
     ),
   ),
   (
-    designation: "Senior Software Engineer",
-    company: "Confidential Technology Firm",
+    designation: "Software Development Intern",
+    company: "HighRadius Corporation - Remote",
     location: "Remote",
-    start: 2021,
-    end: 2022,
+    start: "July 2021",
+    end: "May 2022",
     achievements: (
-      [*Built an engineering team from the ground up*, establishing development workflows and collaboration practices that improved team productivity.],
-      [*Led a cross-functional engineering team* (Frontend, Backend, DevOps) to *design*, *develop*, and *launch an MVP*, accelerating product validation and time-to-market.],
-      [*Designed the foundational architecture* for a product leveraging *photogrammetry and Machine Learning (ML)* to generate high-quality 3D models from 2D inputs.],
+      [Built a LightGBM model (80% accuracy) to predict invoice payment delays, paired with a ReactJS dashboard for invoice details.],
+      [Engineered the backend with Spring, Hibernate and MySQL, helping the business flag high-risk accounts early.],
     ),
   ),
-  (
-    designation: "Technical Writer",
-    company: "Confidential AI Company",
-    location: "Remote",
-    start: "2020",
-    end: "2021",
-    achievements: (
-      [*Collaborated with marketing teams* to define a technical content strategy around *Computer Vision (CV) and Machine Learning (ML)*, improving clarity and accuracy of published material.],
-      [*Published technical articles on CV and Autonomous Systems*, contributing to a *~25% improvement in keyword effectiveness* and overall content quality.],
-      [*Optimized blog content for SEO* through structured keyword integration, resulting in a *~3x increase in organic traffic*.],
-    ),
-  ),
-  (
-    designation: "Software Support Engineer",
-    company: "Confidential SaaS Company",
-    location: "Major Tech Hub, India",
-    start: "2019",
-    end: "2020",
-    achievements: (
-      [*Triaged and analyzed* support tickets daily, prioritizing and escalating critical issues, enabling significantly faster bug resolution and reduced downtime.],
-      [*Monitored system behavior proactively*, diagnosing frontend and backend issues and resolving them within defined SLAs, ensuring a consistent user experience.],
-      [*Facilitated cross-functional collaboration* between support and engineering teams, improving documentation and communication, and significantly reducing miscommunication-related delays.],
-    ),
-  ),
+)
+
+// Achievements outside of work experience
+#let achievements = (
+  [Solved 900+ Data Structures & Algorithms problems across multiple competitive programming platforms.],
+  [Won 2nd Prize at HackCBS 3.0 among 260+ colleges. Led development of an LSTM-based rap-lyrics generator deployed on AWS EC2 with a Flask backend.],
+  [Secured 1st position at SRM Research Day 2021 (Aerospace Dept.) for a paper on an autonomous Modular Morphing Drone that dynamically reshapes itself in response to environmental changes.],
+  [Won 1st Prize and the Tezos track at a Python Week Hackathon, leading a team building a blockchain-based web app for secure autopsy report management.],
 )

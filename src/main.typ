@@ -1,6 +1,6 @@
 // Import variables and functions
-#import "variables.typ": doc, college, skills, details, experiences
-#import "functions.typ": header, section, experience, academic
+#import "variables.typ": doc, college, skills, details, experiences, achievements
+#import "functions.typ": header, section, experience, academic, pointList, skillsList
 
 // Document settings
 #set document(
@@ -9,18 +9,19 @@
   description: [#doc.description],
   keywords: doc.keywords,
 )
-#set page(margin: 1.25cm)
-#show link: underline
-#set text(font: "Liberation Serif")
+#set page(margin: 1.1cm)
+#show link: it => text(fill: rgb("#555555"))[#it]
+#set text(font: "Carlito", size: 9.5pt, fill: rgb("#1A1A1A"))
+#set par(leading: 0.74em)
 
 // The top-level heading of the resume
-#header(details.name, details.links)
+#header(details.name, details.links, tagline: details.tagline)
+#section[Summary]
+#details.summary
 
 // The "skills" section
 #section[Skills]
-#for (key, value) in skills {
-  [*#key*: #value #linebreak()]
-}
+#skillsList(skills)
 
 // The "experience" section
 #section[Experience]
@@ -44,3 +45,7 @@
   college.start,
   college.end,
 )
+
+// The "achievements" section
+#section[Achievements]
+#pointList(achievements)
