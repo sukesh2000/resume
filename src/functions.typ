@@ -27,7 +27,7 @@
       ],
     ),
   )
-  v(10pt, weak: true)
+  v(9pt, weak: true)
 }
 
 // Function definition to render the role/company/dates line
@@ -39,7 +39,7 @@
 
 // Function to define the section of the resume
 #let section(body) = {
-  v(9pt, weak: true)
+  v(8pt, weak: true)
   text(size: 12pt, weight: "bold", fill: rgb("#1F4E79"))[#upper(body)]
   v(3pt, weak: true)
   line(length: 100%, stroke: 0.75pt + rgb("#1F4E79"))
@@ -48,27 +48,26 @@
 
 #let experience(designation, company, location, start, end, pointers) = {
   role(designation, company, location, start, end)
-  v(3pt, weak: true)
-  set block(spacing: 6pt)
+  set block(spacing: 5.6pt)
   for (i, pointer) in pointers.enumerate() {
     let project = pointer.at("project", default: none)
-    let leadSpacing = if i == 0 { 7pt } else { 4pt }
+    let leadSpacing = if i == 0 { 5pt } else { 7pt }
     if project != none {
       block(above: leadSpacing, below: 3pt)[#text(weight: "bold")[#project]]
       for point in pointer.points {
         let content = if type(point) == dictionary { point.paragraph } else { point }
-        block(above: 4pt, inset: (left: 1em))[- #content]
+        block(above: 5.6pt, inset: (left: 1em))[- #content]
       }
     } else {
       block(above: leadSpacing, inset: (left: 1em))[- #pointer]
     }
   }
-  v(7pt, weak: true)
+  v(5pt, weak: true)
 }
 
 // Function to render a flat list of bullet points (e.g. achievements)
 #let pointList(items) = {
-  set block(spacing: 6pt)
+  set block(spacing: 5.6pt)
   for item in items {
     block[- #item]
   }
@@ -76,7 +75,7 @@
 
 // Function to render the skills section with generous line spacing
 #let skillsList(skills) = {
-  set block(spacing: 6pt)
+  set block(spacing: 5.6pt)
   for (key, value) in skills {
     block[*#key*: #value]
   }

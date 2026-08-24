@@ -31,7 +31,7 @@
 #let details = (
   name: "Sukesh Seth",
   tagline: "Software Engineer  |  Java · Golang · Spring Boot · Gin · Microservices",
-  summary: [Software engineer with 4+ years at ThoughtWorks, owning distributed systems and microservices end-to-end for BFSI and enterprise platforms, from architecture through production reliability. Works primarily in Java, Golang and Node.js, with depth in Kafka-driven event systems, Redis caching, Kubernetes/Helm deployments and cloud-native observability. Comfortable working across the full backend lifecycle -- from development and testing to debugging and monitoring.],
+  summary: [Software engineer with 4+ years at ThoughtWorks, owning distributed systems and microservices end-to-end for BFSI and enterprise platforms. Works primarily in Java, Golang and Node.js, with depth in Kafka-driven event systems, Redis caching, Kubernetes/Helm deployments, and cloud-native observability across the full backend lifecycle.],
   links: (
     (url: "tel:+918939352970", display: "+918939352970"),
     (type: "email", url: "contact.sukesh20@gmail.com", display: "contact.sukesh20@gmail.com"),
@@ -55,24 +55,22 @@
       (
         project: "IDFC Bank",
         points: (
-          [Config and deployment platform: manual, fragmented config changes across 98 microservices were slowing releases and risking avoidable outages.],
-          [As a founding senior contributor on a 5-engineer team, helped design and deliver a centralized deployment-variable and configuration-management platform (Golang, Oracle) to fix this.],
-          [Personally drove implementation of Redis-backed caching for authorization lookups, versioned config records with full change history, Kafka-driven automated rollout of config-change events and an automated release pipeline (conftest, Pact, Helm) governed by a ServiceNow approval workflow.],
-          [Designed and built a Golang auth middleware for an MCP server, exposing the config platform to AI-assisted tools.],
-          [Delivered 60% less manual config time, 85% fewer DB permission-check queries on systems processing 10M+ daily transactions and 65% platform adoption growth within one quarter.],
-          [Observability and release safety: fragmented tracing and slow policy validation were increasing production risk across a polyglot microservices stack.],
-          [Owned the modernization of observability and release-safety practices for the platform.],
-          [Migrated tracing and metrics from OpenCensus to OpenTelemetry across Go, Java and Node.js, introduced a region-aware Kafka client mode for the Kafka-less DR region, left-shifted conftest validation to per-service checks across 98 services biweekly and hardened secrets handling with audit logging.],
-          [Automated disaster-recovery failover by integrating an existing runbook into our Helm tooling with a CI/CD pipeline, provisioning Kafka in parallel (bridged by no-op stubs until ready) alongside Redis, Prometheus and networking, then switching services active with controlled scale-down/up of deployments and StatefulSets in 12 minutes.],
-          [Cut policy-validation runtime from 40 minutes to 3 minutes, reduced MTTD by 70% and MTTR by 45%, with zero severity-1 outages since rollout.],
+          [Manual and fragmented configuration changes across 98 microservices increased operational effort and outage risk. Contributed to building a Java, Spring boot based configuration platform with Redis caching, versioned configurations, Kafka-driven rollouts, and automated Conftest/Pact/Helm validation, *reducing configuration time by 60%, database queries by 85%, and increasing adoption by 65%*.],
+          [Fragmented tracing and slow policy validation created production and release risks across a polyglot stack. Led observability and release-safety improvements by migrating tracing to OpenTelemetry across Golang, Java, and Node.js, introducing a region-aware Kafka client for disaster recovery, and shifting Conftest validation to individual services, *reducing validation time from 40 to 3 minutes, MTTD by 70%, and MTTR by 45%*.],
+          [The existing configuration platform needed secure access from AI-assisted development tools. Designed and implemented a Java based authentication middleware for an MCP server, enabling secure exposure of configuration-platform capabilities to AI-assisted tools.],
+          [Manual DR execution required multiple infrastructure and service-level steps, increasing recovery time. Automated the existing DR runbook through Helm and CI/CD by provisioning Kafka in parallel with Redis, Prometheus, and networking, using no-op stubs until dependencies were ready, and orchestrating controlled deployment and StatefulSet scale-down/up, *completing failover in 12 minutes*.],
+          [The platform's feature-flag tooling required migration from Unleash v6 to v7 alongside a breaking CommonJS-to-ESM change. Independently led the migration and resolved compatibility issues across dependent services, *completing the upgrade without disruption to 98 services*.],
+          [Configuration changes depended on ServiceNow webhook notifications, creating a risk of missed updates when webhooks failed. Implemented a webhook and reconciliation pattern with a periodic job that independently re-polls approval status, ensuring configuration changes are not missed due to dropped webhook events.],
+          [Tech Stack: Golang, Java, Spring Boot, Oracle, Redis, Kafka, Kubernetes, Helm, Prometheus, OpenTelemetry, ServiceNow.],
         ),
       ),
       (
         project: "IDeaS",
         points: (
-          [Transformed forecasting feature from month-wise to day-wise forecasts (30x finer granularity) using Spring Boot and MS SQL, adding new calculation dimensions and Kafka-driven adjustments for incoming booking data.],
-          [Introduced real-time data analysis capabilities using Kafka, reducing price analysis time between two cycles by 24 hours.],
-          [Played a key role in monolith-to-microservices migration using Spring MVC, enabling parallel cross-service processing and easing DB lock contention observed under peak load.],
+          [The existing forecasting system generated month-wise forecasts, limiting the granularity of pricing analysis. Enhanced the Spring Boot forecasting service to support *day-wise forecasts with 30x finer granularity*, introducing additional calculation dimensions and Kafka-driven adjustments for incoming booking data.],
+          [Delayed booking-data processing increased the time between pricing analysis cycles. Introduced Kafka-driven real-time data analysis capabilities, *reducing the time between two price-analysis cycles by 24 hours*.],
+          [A monolithic architecture caused DB lock contention and limited parallel processing during peak loads. Contributed to the migration toward microservices using Spring MVC, enabling *parallel cross-service processing and reducing database lock contention*.],
+          [Tech Stack: Java, Spring Boot, Spring MVC, MS SQL, Kafka.],
         ),
       ),
     ),
@@ -84,8 +82,13 @@
     start: "July 2021",
     end: "May 2022",
     achievements: (
-      [Built a LightGBM model (80% accuracy) to predict invoice payment delays, paired with a ReactJS dashboard for invoice details.],
-      [Engineered the backend with Spring, Hibernate and MySQL, helping the business flag high-risk accounts early.],
+      (
+        project: "Invoice Payment Risk Prediction",
+        points: (
+          [Businesses needed an early way to identify invoices likely to experience payment delays. Built a LightGBM-based prediction model with *80% accuracy* and developed a ReactJS dashboard for invoice details, with a Spring/Hibernate/MySQL backend, enabling earlier identification of high-risk accounts.],
+          [Tech Stack: Python, LightGBM, ReactJS, Java, Spring, Hibernate, MySQL.],
+        ),
+      ),
     ),
   ),
 )

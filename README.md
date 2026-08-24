@@ -18,7 +18,7 @@ repository, follow these guidelines:
 
    ```console
    mkdir build
-   typst compile ./src/main.typ ./build/resume.pdf
+   typst compile ./src/main.typ ./build/sukeshResume.pdf
    ```
 
 4. To compile and watch for changes at the same time, you can invoke the
@@ -26,7 +26,7 @@ repository, follow these guidelines:
 
    ```console
    mkdir build
-   typst watch ./src/main.typ ./build/resume.pdf
+   typst watch ./src/main.typ ./build/sukeshResume.pdf
    ```
 
 If you followed the steps properly until now and can verify the contents of the

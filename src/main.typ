@@ -11,17 +11,13 @@
 )
 #set page(margin: 1.1cm)
 #show link: it => text(fill: rgb("#555555"))[#it]
-#set text(font: "Carlito", size: 9.5pt, fill: rgb("#1A1A1A"))
-#set par(leading: 0.74em)
+#set text(font: "Carlito", size: 9.3pt, fill: rgb("#1A1A1A"))
+#set par(leading: 0.6em)
 
 // The top-level heading of the resume
 #header(details.name, details.links, tagline: details.tagline)
 #section[Summary]
 #details.summary
-
-// The "skills" section
-#section[Skills]
-#skillsList(skills)
 
 // The "experience" section
 #section[Experience]
@@ -35,6 +31,10 @@
     exp.achievements,
   )
 }
+
+// The "skills" section
+#section[Skills]
+#skillsList(skills)
 
 // The "education" section
 #section[Education]
