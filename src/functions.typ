@@ -48,7 +48,7 @@
 
 #let experience(designation, company, location, start, end, pointers) = {
   role(designation, company, location, start, end)
-  set block(spacing: 5.6pt)
+  set block(spacing: 4.8pt)
   for (i, pointer) in pointers.enumerate() {
     let project = pointer.at("project", default: none)
     let leadSpacing = if i == 0 { 5pt } else { 7pt }
@@ -56,7 +56,7 @@
       block(above: leadSpacing, below: 3pt)[#text(weight: "bold")[#project]]
       for point in pointer.points {
         let content = if type(point) == dictionary { point.paragraph } else { point }
-        block(above: 5.6pt, inset: (left: 1em))[- #content]
+        block(above: 4.8pt, inset: (left: 1em))[- #content]
       }
     } else {
       block(above: leadSpacing, inset: (left: 1em))[- #pointer]
@@ -67,7 +67,7 @@
 
 // Function to render a flat list of bullet points (e.g. achievements)
 #let pointList(items) = {
-  set block(spacing: 5.6pt)
+  set block(spacing: 4.8pt)
   for item in items {
     block[- #item]
   }
@@ -75,10 +75,18 @@
 
 // Function to render the skills section with generous line spacing
 #let skillsList(skills) = {
-  set block(spacing: 5.6pt)
+  set block(spacing: 4.8pt)
   for (key, value) in skills {
     block[*#key*: #value]
   }
+}
+
+// Function to render a project entry (name, subtitle/context, bullet points)
+#let projectEntry(name, subtitle, points) = {
+  [#text(weight: "bold", size: 11pt)[#name] #text(fill: rgb("#555555"))[| #subtitle]]
+  v(3pt, weak: true)
+  pointList(points)
+  v(5pt, weak: true)
 }
 
 // Function to render the academic entries
