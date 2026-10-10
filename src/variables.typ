@@ -10,9 +10,16 @@
 // `typst compile --input summary="..." --input extra_skills="Liquibase, LDAP" ...`.
 // Both default to the empty string, meaning "use the hand-written defaults below."
 #let summary_override = sys.inputs.at("summary", default: "")
+#let tagline_override = sys.inputs.at("tagline", default: "")
 #let extra_skills = sys.inputs.at("extra_skills", default: "")
 
-// Document metadata
+// Which resume variant to render -- one of "unified" (default), "backend", or "ai".
+// All three variants share the exact same facts, metrics, dates, and ownership
+// claims from this one file -- only headline, summary, and skills ordering
+// change per variant. Pass `--input variant=backend` or `--input variant=ai`.
+// `unified` is the single-upload default for Naukri/Instahyre-style platforms.
+#let variant = sys.inputs.at("variant", default: "unified")
+
 #let doc = (
   author: "Sukesh Seth",
   title: "Sukesh's Resume",
@@ -20,7 +27,6 @@
   keywords: ("resume", "engineering", "typst"),
 )
 
-// College related information
 #let college = (
   name: "SRM Institute of Science and Technology",
   degree: "B. Tech.",
@@ -29,32 +35,62 @@
   end: 2022,
 )
 
-// Skills
-#let base_skills = (
-  "Languages": "Java, Golang, Python, Node.js, SQL",
+// Skills -- the actual content lives here, once, regardless of variant.
+#let skill_categories = (
+  "Languages": "Java, Go (Golang), Python",
   "Frameworks": "Spring Boot, Spring Security, Hibernate, Node.js, Gin, GORM",
-  "APIs & Messaging": "REST APIs, gRPC, Kafka",
+  "Distributed Systems & Messaging": "Microservices, Distributed Systems, REST APIs, gRPC, Kafka",
   "Databases & Caching": "PostgreSQL, Oracle, Cassandra, MongoDB, Redis, Elasticsearch",
-  "AI/LLM Engineering": "LLM Integration (Claude), RAG, Embeddings/Vector Search, LangChain, LangGraph, LlamaIndex, Agentic Workflow Design, Prompt Engineering, Temporal, Local LLM Deployment (Ollama)",
-  "DevOps & Cloud": "Docker, Kubernetes, Amazon Web Services (AWS), CI/CD",
+  "AI/LLM Engineering": "LLM Integration (Claude), RAG, Embeddings/Vector Search, LangChain, LangGraph, LlamaIndex, Agentic Workflow Design, Prompt Engineering, Temporal, Local LLM Deployment (Ollama), AI-Assisted Development (Claude, GitHub Copilot, Minimax)",
+  "DevOps & Cloud": "Docker, Kubernetes, AWS (EC2, S3, EKS), CI/CD (Jenkins, GoCD)",
   "Testing": "JUnit, Mockito, Jest, Testify/gomock",
   "Version Control": "Git",
-  "Problem Solving": "Data Structures & Algorithms, Multithreading, Design Patterns, System Design",
+  "Problem Solving": "Data Structures & Algorithms, Multithreading, Design Patterns, System Design, Agile (Scrum, XP)",
 )
+
+// Only the ORDER of categories changes per variant -- the category names and
+// their contents are identical across all three, so there is exactly one
+// place to update a skill and no risk of the variants drifting apart.
+#let backend_first_order = ("Languages", "Frameworks", "Distributed Systems & Messaging", "Databases & Caching", "DevOps & Cloud", "AI/LLM Engineering", "Testing", "Version Control", "Problem Solving")
+#let skill_order = (
+  unified: backend_first_order,
+  backend: backend_first_order,
+  ai: ("AI/LLM Engineering", "Languages", "Frameworks", "Distributed Systems & Messaging", "Databases & Caching", "DevOps & Cloud", "Testing", "Version Control", "Problem Solving"),
+)
+#let ordered_keys = skill_order.at(variant, default: skill_order.unified)
+#let base_skills = ordered_keys.map(key => (key, skill_categories.at(key)))
 #let skills = if extra_skills != "" {
-  base_skills + ("Additional": extra_skills)
+  base_skills + (("Additional", extra_skills),)
 } else {
   base_skills
 }
 
-// Header related information
+// Per-variant tagline and summary. Same facts and metrics everywhere -- only
+// emphasis and ordering change. `tagline_override`/`summary_override` (set via
+// `--input tagline=...`/`--input summary=...`) still win for one-off,
+// job-specific tailoring on top of whichever variant is selected.
+#let taglines = (
+  unified: "Backend Engineer  |  Java · Go · Distributed Systems · AI Engineering",
+  backend: "Backend Engineer  |  Java · Go · Distributed Systems · Microservices",
+  ai: "AI Engineer  |  LLM Agents · RAG · Agentic Workflows · Java/Go Backend",
+)
+#let summaries = (
+  unified: "Backend engineer with 4+ years at ThoughtWorks, building distributed systems and event-driven microservices in Java and Go for BFSI and enterprise platforms, with deep experience in Kafka, Redis, and production reliability. Complementing this, I design LLM-powered agents using retrieval-augmented generation and agentic workflows to automate real engineering problems. Comfortable across the full lifecycle, from distributed-systems architecture to cloud-native deployment on AWS and Kubernetes.",
+  backend: "Backend engineer with 4+ years at ThoughtWorks, building distributed systems and event-driven microservices in Java and Go for BFSI and enterprise platforms, with deep experience in Kafka, Redis, and production reliability. Experienced across the full lifecycle, from distributed-systems architecture and observability to cloud-native deployment on AWS and Kubernetes, with additional hands-on experience building LLM-powered agents.",
+  ai: "AI engineer with hands-on experience designing and building LLM-powered agents, applying retrieval-augmented generation and agentic workflows (LangGraph, LangChain) to automate real engineering problems such as microservice contract-drift detection. Grounded in 4+ years of backend engineering at ThoughtWorks, building distributed systems and event-driven microservices in Java and Go, with deep experience in Kafka, Redis, and production reliability at BFSI scale.",
+)
+
 #let details = (
   name: "Sukesh Seth",
-  tagline: "AI Backend Engineer  |  Java · Golang · LLM/GenAI · Microservices",
+  tagline: if tagline_override != "" {
+    tagline_override
+  } else {
+    taglines.at(variant, default: taglines.unified)
+  },
   summary: if summary_override != "" {
     summary_override
   } else {
-    "Backend engineer with 4+ years at ThoughtWorks, building distributed systems and microservices in Java and Golang for BFSI and enterprise platforms, with hands-on generative AI experience building and productionizing LLM-powered agents (RAG, LangChain/LangGraph, Claude integration). Deep in Kafka-driven event systems, Redis caching, AWS, Kubernetes/Helm, and cloud-native observability across the full backend lifecycle."
+    summaries.at(variant, default: summaries.unified)
   },
   links: (
     (url: "tel:+918939352970", display: "+918939352970"),
@@ -67,7 +103,6 @@
   ),
 )
 
-// Past work experience and achievements
 #let experiences = (
   (
     designation: "Software Engineer",
@@ -79,13 +114,13 @@
       (
         project: "IDFC Bank",
         points: (
-          [Manual and fragmented configuration changes across 98 microservices increased operational effort and outage risk. Contributed to building a #pick((golang: "Golang", java: "Java, Spring Boot")) based configuration platform with Redis caching, versioned configurations, Kafka-driven rollouts, and automated Conftest/Pact/Helm validation, *reducing configuration time by 60%, database queries by 85%, and increasing adoption by 65%*.],
-          [Fragmented tracing and slow policy validation created production and release risks across a polyglot stack. Led observability and release-safety improvements by migrating tracing to OpenTelemetry across Golang, Java, and Node.js, introducing a region-aware Kafka client for disaster recovery, and shifting Conftest validation to individual services, *reducing validation time from 40 to 3 minutes, MTTD by 70%, and MTTR by 45%*.],
-          [The existing configuration platform needed secure access from AI-assisted development tools. Designed and implemented a #pick((golang: "Golang", java: "Java")) based authentication middleware for an MCP server, enabling secure exposure of configuration-platform capabilities to AI-assisted tools.],
-          [Manual DR execution required multiple infrastructure and service-level steps, increasing recovery time. Automated the existing DR runbook through Helm and CI/CD by provisioning Kafka in parallel with Redis, Prometheus, and networking, using no-op stubs until dependencies were ready, and orchestrating controlled deployment and StatefulSet scale-down/up, *completing failover in 12 minutes*.],
+          [Contributed to building a #pick((golang: "Go-based", java: "Java, Spring Boot based")) configuration and deployment platform for 98 microservices, replacing manual, fragmented config changes that risked outages. Added Redis caching, versioned configs, Kafka-driven rollouts, and automated Conftest/Pact/Helm validation, *reducing configuration time by 60%, database queries by 85%, and increasing adoption by 65%*.],
+          [Led observability and release-safety modernization across a polyglot stack running Go, Java, and Node.js, replacing fragmented tracing and slow policy validation that were raising production risk. Migrated tracing to OpenTelemetry, added a region-aware Kafka client for disaster recovery, and shifted Conftest validation to run per service, *reducing validation time from 40 to 3 minutes, MTTD by 70%, and MTTR by 45%*.],
+          [Designed and implemented a #pick((golang: "Go-based", java: "Java-based")) authentication middleware for an MCP server, giving the existing configuration platform secure access from AI-assisted development tools.],
+          [Manual DR execution required multiple infrastructure and service-level steps, increasing recovery time. Automated the existing DR runbook through Helm and CI/CD, provisioning Kafka in parallel with Redis, Prometheus, and networking, then orchestrating a controlled StatefulSet cutover, *completing failover in 12 minutes*.],
           [The platform's feature-flag tooling required migration from Unleash v6 to v7 alongside a breaking CommonJS-to-ESM change. Independently led the migration and resolved compatibility issues across dependent services, *completing the upgrade without disruption to 98 services*.],
           [Configuration changes depended on ServiceNow webhook notifications, creating a risk of missed updates when webhooks failed. Implemented a webhook and reconciliation pattern with a periodic job that independently re-polls approval status, ensuring configuration changes are not missed due to dropped webhook events.],
-          [Tech Stack: Golang, Java, Spring Boot, Oracle, Redis, Kafka, Kubernetes, AWS, Helm, Prometheus, OpenTelemetry, ServiceNow.],
+          [Tech Stack: Go, Java, Spring Boot, Oracle, Redis, Kafka, Kubernetes, AWS, Helm, Prometheus, OpenTelemetry, ServiceNow.],
         ),
       ),
       (
@@ -101,22 +136,24 @@
   ),
 )
 
-// Personal / hackathon projects
+// ChainReact's data; folded into the ThoughtWorks block in main.typ rather
+// than rendered as its own section.
 #let projects = (
   (
     name: "ChainReact",
     subtitle: "Global ThoughtWorks AI/works Hackathon 2026",
     points: (
-      [Microservice contract drift (schema/semantic mismatches between services) silently causes outages that static linters miss. Built an autonomous LLM agent combining a deterministic rules engine with LLM semantic analysis to auto-raise human-reviewable fix PRs with human-in-the-loop gates for ambiguous cases, *cutting time-to-detect from days to under 2 minutes and time-to-fix from hours to under 5, scaling linearly from 4 to 400 services*.],
-      [Re-architected the agent, replacing Temporal workflows with LangGraph/LangChain orchestration and direct source parsing with a LlamaIndex-backed RAG pipeline over embedded specs/docs, *improving analysis accuracy and workflow composability*.],
-      [Tech Stack: Python, FastAPI, Claude/Ollama, LangChain, LangGraph, LlamaIndex, vector DB, PostgreSQL, Next.js, TypeScript, GitHub API.],
+      [Built an autonomous LLM agent that detects microservice contract drift using deterministic rules and LLM semantic analysis, replacing manual review that let silent schema and semantic mismatches reach production. Auto-generates human-reviewable fix PRs with human-in-the-loop gates for ambiguous cases, *cutting time-to-detect from days to under 2 minutes and time-to-fix from hours to under 5 minutes, scaling linearly from 4 to 400 services*.],
+      [Re-architected the agent's orchestration and detection layers, replacing Temporal workflows with LangGraph/LangChain and direct source parsing with a LlamaIndex-backed RAG pipeline over embedded specs and documentation, *improving analysis accuracy and workflow composability*.],
+      [Developed during an internal ThoughtWorks hackathon. The initiative was subsequently adopted into the AI/Works stack.],
+      [Tech Stack: Python, FastAPI, Claude/Ollama, LangChain, LangGraph, LlamaIndex, PostgreSQL (pgvector), Next.js, TypeScript, GitHub API.],
     ),
   ),
 )
 
 // Achievements outside of work experience
 #let achievements = (
-  [Solved 900+ Data Structures & Algorithms problems across multiple competitive programming platforms.],
+  [Solved 1000+ Data Structures & Algorithms problems across multiple competitive programming platforms.],
   [Won 2nd Prize at HackCBS 3.0 among 260+ colleges. Led development of an LSTM-based rap-lyrics generator deployed on AWS EC2 with a Flask backend.],
   [Secured 1st position at SRM Research Day 2021 (Aerospace Dept.) for a paper on an autonomous Modular Morphing Drone that dynamically reshapes itself in response to environmental changes.],
   [Won 1st Prize and the Tezos track at a Python Week Hackathon, leading a team building a blockchain-based web app for secure autopsy report management.],

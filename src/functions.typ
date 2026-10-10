@@ -1,4 +1,3 @@
-// Function to define the header of the resume
 #let header(name, contacts, tagline: none) = {
   align(center, text(size: 20pt, weight: "bold", fill: rgb("#1F4E79"))[#upper(name)])
   if tagline != none {
@@ -30,14 +29,12 @@
   v(9pt, weak: true)
 }
 
-// Function definition to render the role/company/dates line
 #let role(name, company, location, start, end) = {
   grid(columns: (auto, 1fr), [#text(weight: "bold", size: 11pt)[#name] #text(fill: rgb("#555555"))[| #company]], grid.cell(
       align(right, text(fill: rgb("#555555"))[#start -- #end]),
     ))
 }
 
-// Function to define the section of the resume
 #let section(body) = {
   v(8pt, weak: true)
   text(size: 12pt, weight: "bold", fill: rgb("#1F4E79"))[#upper(body)]
@@ -65,7 +62,6 @@
   v(5pt, weak: true)
 }
 
-// Function to render a flat list of bullet points (e.g. achievements)
 #let pointList(items) = {
   set block(spacing: 4.8pt)
   for item in items {
@@ -73,7 +69,6 @@
   }
 }
 
-// Function to render the skills section with generous line spacing
 #let skillsList(skills) = {
   set block(spacing: 4.8pt)
   for (key, value) in skills {
@@ -81,15 +76,6 @@
   }
 }
 
-// Function to render a project entry (name, subtitle/context, bullet points)
-#let projectEntry(name, subtitle, points) = {
-  [#text(weight: "bold", size: 11pt)[#name] #text(fill: rgb("#555555"))[| #subtitle]]
-  v(3pt, weak: true)
-  pointList(points)
-  v(5pt, weak: true)
-}
-
-// Function to render the academic entries
 #let academic(name, degree, subject, start, end) = {
   grid(columns: (auto, 1fr), [*#name* - #degree in #subject], grid.cell(align(right, [#start\-#end])))
 }

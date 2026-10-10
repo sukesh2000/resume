@@ -1,8 +1,6 @@
-// Import variables and functions
 #import "variables.typ": doc, college, skills, details, experiences, projects, achievements
-#import "functions.typ": header, section, experience, academic, pointList, skillsList, projectEntry
+#import "functions.typ": header, section, experience, academic, pointList, skillsList
 
-// Document settings
 #set document(
   author: doc.author,
   title: doc.title,
@@ -14,14 +12,29 @@
 #set text(font: "Carlito", size: 9pt, fill: rgb("#1A1A1A"))
 #set par(leading: 0.54em)
 
-// The top-level heading of the resume
 #header(details.name, details.links, tagline: details.tagline)
 #section[Summary]
 #details.summary
 
-// The "experience" section
-#section[Experience]
-#for exp in experiences {
+// The "professional experience" section. ChainReact (an internal ThoughtWorks
+// AI engineering initiative, not a separate job) is folded in under the
+// ThoughtWorks entry, positioned second (right after IDFC Bank, before
+// IDeaS), rather than living in a separate standalone Projects section.
+#let chainreact = projects.at(0)
+#let thoughtworks = experiences.at(0)
+#let ai_initiative_entry = (project: "ChainReact | AI/Works Initiative (Internal ThoughtWorks AI Engineering Project)", points: chainreact.points)
+#let thoughtworks_with_ai_initiative = (
+  designation: thoughtworks.designation,
+  company: thoughtworks.company,
+  location: thoughtworks.location,
+  start: thoughtworks.start,
+  end: thoughtworks.end,
+  achievements: thoughtworks.achievements.slice(0, 1) + (ai_initiative_entry,) + thoughtworks.achievements.slice(1),
+)
+#let experiences_with_ai_initiative = (thoughtworks_with_ai_initiative,) + experiences.slice(1)
+
+#section[Professional Experience]
+#for exp in experiences_with_ai_initiative {
   experience(
     exp.designation,
     exp.company,
@@ -32,17 +45,9 @@
   )
 }
 
-// The "projects" section
-#section[Projects]
-#for proj in projects {
-  projectEntry(proj.name, proj.subtitle, proj.points)
-}
-
-// The "skills" section
 #section[Skills]
 #skillsList(skills)
 
-// The "education" section
 #section[Education]
 #academic(
   college.name,
@@ -52,6 +57,5 @@
   college.end,
 )
 
-// The "achievements" section
 #section[Achievements]
 #pointList(achievements)
