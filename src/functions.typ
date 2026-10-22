@@ -1,10 +1,12 @@
+#import "variables.typ": spacing_scale
+
 #let header(name, contacts, tagline: none) = {
   align(center, text(size: 20pt, weight: "bold", fill: rgb("#1F4E79"))[#upper(name)])
   if tagline != none {
-    v(4pt, weak: true)
+    v(4pt * spacing_scale, weak: true)
     align(center, text(size: 10.5pt, fill: rgb("#555555"))[#tagline])
   }
-  v(6pt, weak: true)
+  v(6pt * spacing_scale, weak: true)
   text(
     fill: rgb("#555555"),
     align(
@@ -26,7 +28,7 @@
       ],
     ),
   )
-  v(9pt, weak: true)
+  v(9pt * spacing_scale, weak: true)
 }
 
 #let role(name, company, location, start, end) = {
@@ -36,41 +38,41 @@
 }
 
 #let section(body) = {
-  v(8pt, weak: true)
+  v(8pt * spacing_scale, weak: true)
   text(size: 12pt, weight: "bold", fill: rgb("#1F4E79"))[#upper(body)]
-  v(3pt, weak: true)
+  v(3pt * spacing_scale, weak: true)
   line(length: 100%, stroke: 0.75pt + rgb("#1F4E79"))
-  v(5pt, weak: true)
+  v(5pt * spacing_scale, weak: true)
 }
 
 #let experience(designation, company, location, start, end, pointers) = {
   role(designation, company, location, start, end)
-  set block(spacing: 4.8pt)
+  set block(spacing: 4.8pt * spacing_scale)
   for (i, pointer) in pointers.enumerate() {
     let project = pointer.at("project", default: none)
-    let leadSpacing = if i == 0 { 5pt } else { 7pt }
+    let leadSpacing = if i == 0 { 5pt } else { 7pt } * spacing_scale
     if project != none {
-      block(above: leadSpacing, below: 3pt)[#text(weight: "bold")[#project]]
+      block(above: leadSpacing, below: 3pt * spacing_scale)[#text(weight: "bold")[#project]]
       for point in pointer.points {
         let content = if type(point) == dictionary { point.paragraph } else { point }
-        block(above: 4.8pt, inset: (left: 1em))[- #content]
+        block(above: 4.8pt * spacing_scale, inset: (left: 1em))[- #content]
       }
     } else {
       block(above: leadSpacing, inset: (left: 1em))[- #pointer]
     }
   }
-  v(5pt, weak: true)
+  v(5pt * spacing_scale, weak: true)
 }
 
 #let pointList(items) = {
-  set block(spacing: 4.8pt)
+  set block(spacing: 4.8pt * spacing_scale)
   for item in items {
     block[- #item]
   }
 }
 
 #let skillsList(skills) = {
-  set block(spacing: 4.8pt)
+  set block(spacing: 4.8pt * spacing_scale)
   for (key, value) in skills {
     block[*#key*: #value]
   }

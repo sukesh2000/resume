@@ -51,3 +51,7 @@ build
 # End of https://www.toptal.com/developers/gitignore/api/vim,visualstudiocode
 
 .DS_Store
+
+*.md
+*.docx
+handoff_backup/
