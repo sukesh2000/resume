@@ -18,6 +18,19 @@
 // `--input include_credit_cards=true` for applications that should carry it.
 #let include_credit_cards = sys.inputs.at("include_credit_cards", default: "false") == "true"
 
+// Put the credit card entry first in Experience instead of after the config platform block.
+// Only has an effect together with `include_credit_cards=true`: `--input cards_first=true`.
+#let cards_first = sys.inputs.at("cards_first", default: "false") == "true"
+#let cards_to_front(items) = if cards_first {
+  items.filter(a => a.project == "IDFC Bank Credit Cards") + items.filter(a => a.project != "IDFC Bank Credit Cards")
+} else {
+  items
+}
+
+// Render ChainReact in its own "Projects" section after Experience instead of inside the
+// ThoughtWorks entry: `--input chainreact_as_project=true` (ignored when AI content is off).
+#let chainreact_as_project = sys.inputs.at("chainreact_as_project", default: "false") == "true"
+
 // Contact phone, overridable per application via `--input phone=...`.
 #let contact_phone = sys.inputs.at("phone", default: "+918939352970")
 
@@ -39,10 +52,33 @@
 } else {
   ()
 }
-#let filter_skill_value(value) = if exclude_skills_list.len() == 0 {
+#let filtered_skill_value(value) = if exclude_skills_list.len() == 0 {
   value
 } else {
   value.split(", ").filter(item => not exclude_skills_list.contains(item.trim())).join(", ")
+}
+
+// Rewrite text inside skill lines for one application, e.g.
+// `--input 'skill_replace=AWS (EC2, S3, EKS)=>AWS (EC2, S3, RDS, Lambda, CloudWatch, EKS)'`.
+// Format "old=>new", several pairs separated by "||". Use only for skills the user has confirmed.
+#let skill_replace_raw = sys.inputs.at("skill_replace", default: "")
+#let skill_replacements = if skill_replace_raw != "" {
+  skill_replace_raw.split("||").map(pair => pair.split("=>"))
+} else {
+  ()
+}
+#let filter_skill_value(value) = skill_replacements.fold(
+  filtered_skill_value(value),
+  (acc, pair) => acc.replace(pair.at(0).trim(), pair.at(1).trim()),
+)
+
+// Comma-separated Experience block labels to omit for one application, e.g.
+// `--input exclude_projects=IDeaS` (labels: IDFC Bank, IDFC Bank Credit Cards, IDeaS).
+#let exclude_projects_raw = sys.inputs.at("exclude_projects", default: "")
+#let exclude_projects_list = if exclude_projects_raw != "" {
+  exclude_projects_raw.split(",").map(s => s.trim())
+} else {
+  ()
 }
 
 // Comma-separated skill CATEGORY names to drop entirely for a given
@@ -77,7 +113,7 @@
 #let variant = sys.inputs.at("variant", default: "unified")
 
 // Default job title per variant, used when job_title_override is empty.
-#let default_job_titles = (unified: "Backend Engineer", backend: "Backend Engineer", ai: "AI Engineer")
+#let default_job_titles = (unified: "Backend Engineer", backend: "Software Engineer", ai: "AI Engineer")
 #let job_title = if job_title_override != "" {
   job_title_override
 } else {
@@ -196,7 +232,7 @@
     location: "Bangalore",
     start: "July 2022",
     end: "Present",
-    achievements: (
+    achievements: cards_to_front((
       (
         project: "IDFC Bank",
         points: (
@@ -229,7 +265,7 @@
           [Tech Stack: Java, Spring Boot, Spring MVC, MS SQL, Kafka.],
         ),
       ),
-    ).filter(a => include_credit_cards or a.project != "IDFC Bank Credit Cards"),
+    ).filter(a => include_credit_cards or a.project != "IDFC Bank Credit Cards").filter(a => not exclude_projects_list.contains(a.project))),
   ),
 )
 

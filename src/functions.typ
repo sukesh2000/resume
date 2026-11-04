@@ -78,6 +78,15 @@
   }
 }
 
+#let projectEntry(name, subtitle, points) = {
+  block(above: 7pt * spacing_scale, below: 3pt * spacing_scale)[#text(weight: "bold", size: 11pt)[#name] #text(fill: rgb("#555555"))[| #subtitle]]
+  set block(spacing: 4.8pt * spacing_scale)
+  for point in points {
+    block(above: 4.8pt * spacing_scale, inset: (left: 1em))[- #point]
+  }
+  v(5pt * spacing_scale, weak: true)
+}
+
 #let academic(name, degree, subject, start, end) = {
   grid(columns: (auto, 1fr), [*#name* - #degree in #subject], grid.cell(align(right, [#start\-#end])))
 }
