@@ -1,65 +1,77 @@
-# Jarmos's Resume Template
+# Resume
 
-This template repository contains the [Typst](https://typst.app) source code
-used to build [my resume](https://github.com/Jarmos-san/resume). I prefer using
-Typst over LaTeX due to its intuitive, Markdown-like syntax and the "coding
-mode".
+My resume, written in [Typst](https://typst.app) so the content lives in one
+place and each application can be tailored from the same source.
 
-## Get Started
+## Build the resume
 
-To get started with composing your resume using the same tools as I did in this
-repository, follow these guidelines:
+```console
+typst compile src/main.typ build/sukeshResume.pdf
+```
 
-1. Fork the repository and clone it locally to your system.
-2. Ensure Typst is installed and accessible (follow
-   [the official installation guidelines](https://github.com/typst/typst?tab=readme-ov-file#installation)).
-3. Run the relevant commands as a sanity check to identify whether tools are
-   setup properly:
+To recompile on every save:
 
-   ```console
-   mkdir build
-   typst compile ./src/main.typ ./build/sukeshResume.pdf
-   ```
+```console
+typst watch src/main.typ build/sukeshResume.pdf
+```
 
-4. To compile and watch for changes at the same time, you can invoke the
-   following command:
+Requirements: [Typst](https://github.com/typst/typst#installation) (0.15.x) and
+the **Carlito** font.
 
-   ```console
-   mkdir build
-   typst watch ./src/main.typ ./build/sukeshResume.pdf
-   ```
+If you have [Task](https://taskfile.dev) installed, `task build` and `task`
+(build + watch) do the same thing.
 
-If you followed the steps properly until now and can verify the contents of the
-PDF are as expected then you should proceed ahead to edit the source code with
-your information.
+## Where things are
 
-1. Open the `./src/variables.typ` file which contains a bunch of variables
-   related to your personal information such as your name, contact details, the
-   alma mater, previous work experience and so on.
+| File | What it holds |
+| --- | --- |
+| `src/variables.typ` | All resume content — contact details, summary, experience, skills, education. **Edit this one for content.** |
+| `src/main.typ` | Section order and what gets rendered. |
+| `src/functions.typ` | Layout and styling. |
 
-2. Once you have edited the file and replaced the contents with information
-   about yourself, run the commands above to compile the resume's PDF.
+## Tailoring for a job
 
-3. With the PDF rendered, review it for correctness and then continue applying
-   to the jobs of your choice!
+Everything is driven by `--input` flags, so the source never has to change:
 
-For some guidance/tips and tricks to draft a good technical resume, check out my
-write-up in the DevelopersIndia wiki -
-[How to Create an Ideal Software Engineering Resume](https://wiki.developersindia.in/community-guides/how-to-create-an-ideal-software-engineering-resume).
+```console
+typst compile src/main.typ build/sukeshResume_acme.pdf \
+  --input job_title="Senior Software Engineer" \
+  --input tagline="Senior Software Engineer  |  Java · Spring Boot" \
+  --input summary="..." \
+  --input stack=java \
+  --input spacing_scale=0.84
+```
 
-## Attribution and Credits
+The flags used most often:
 
-Work on the resume would not have been possible without the help of the
-following resources (and everyone else involved in the process):
+| Flag | Purpose |
+| --- | --- |
+| `job_title` | Job title used in the tagline and the ThoughtWorks role line. |
+| `tagline`, `summary` | Replace the header tagline and summary for this build. |
+| `variant` | `unified` (default), `backend` or `ai` — changes emphasis across the whole resume. |
+| `stack` | `golang` (default) or `java` — which stack the IDFC platform is described with. |
+| `spacing_scale`, `leading` | Tighter or looser vertical spacing, to keep the resume on one page. |
+| `top_skills`, `extra_skills`, `exclude_skills` | Add or drop a Core Skills line and individual skill terms. |
+| `exclude_categories`, `exclude_projects` | Drop whole skill categories or experience blocks. |
+| `email`, `phone` | Per-application contact overrides. |
 
-- The
-  [r/EngineeringResumes Resume Template](https://docs.google.com/document/d/1MBvhATv8y-ESORopRoLSZ3f3HjkM_Qa_f8fIHAEqgnI)
-- The [r/developersIndia](https://www.reddit.com/r/developersIndia) subreddit
-  for introducing me to Typst.
+### Keeping it to one page
 
-## Licensing and Distribution
+Three Experience blocks plus skills is a tight fit. If a build spills onto a
+second page, reduce `spacing_scale` from its default `0.84`, stepping down by
+`0.02` at a time. The standard resume builds at one page.
 
-The contents of this repository are licensed under the terms and conditions
-(T&Cs) of CC BY-NC 4.0 and you are allowed to modify, copy and distribute the
-contents under similar T&Cs. For more information on the licensing T&Cs, refer
-to the [LICENSE](./LICENSE) document.
+## Notes
+
+- `build/` is a symlink to a folder outside the repo, and `*.pdf` is gitignored
+  — PDFs are never committed.
+- Generated PDFs are always named `build/sukeshResume.pdf` (or
+  `build/sukeshResume_<tag>.pdf` for a tailored build).
+
+## Credits and licence
+
+Based on [Jarmos's Typst resume template](https://github.com/Jarmos-san/resume),
+which in turn draws on the
+[r/EngineeringResumes template](https://docs.google.com/document/d/1MBvhATv8y-ESORopRoLSZ3f3HjkM_Qa_f8fIHAEqgnI).
+
+Licensed under [CC BY-NC 4.0](./LICENSE).
