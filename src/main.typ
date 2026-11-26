@@ -1,4 +1,4 @@
-#import "variables.typ": doc, college, skills, details, experiences, projects, achievements, include_ai_initiative, chainreact_as_project, font_size, page_margin, par_leading
+#import "variables.typ": doc, college, skills, details, experiences, projects, achievements, include_ai_initiative, include_chainreact, chainreact_as_project, font_size, page_margin, par_leading
 #import "functions.typ": header, section, experience, projectEntry, academic, pointList, skillsList
 
 #set document(
@@ -20,7 +20,7 @@
 // AI engineering initiative, not a separate job) is folded in under the
 // ThoughtWorks entry, positioned second (right after IDFC Bank, before
 // IDeaS), rather than living in a separate standalone Projects section.
-#let experiences_with_ai_initiative = if include_ai_initiative and not chainreact_as_project {
+#let experiences_with_ai_initiative = if include_ai_initiative and not chainreact_as_project and include_chainreact {
   let chainreact = projects.at(0)
   let thoughtworks = experiences.at(0)
   let ai_initiative_entry = (project: "ChainReact | AI/Works Initiative (Internal ThoughtWorks AI Engineering Project)", points: chainreact.points)
@@ -49,7 +49,7 @@
   )
 }
 
-#if include_ai_initiative and chainreact_as_project {
+#if include_ai_initiative and chainreact_as_project and include_chainreact {
   section[Projects]
   projectEntry("ChainReact", "AI/Works Initiative (Internal ThoughtWorks AI Engineering Project)", projects.at(0).points)
 }
